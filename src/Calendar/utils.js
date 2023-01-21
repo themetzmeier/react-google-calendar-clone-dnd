@@ -77,8 +77,6 @@ export const generateWeekViewCoordinates = (event, startDate) => {
   }
 
   return {
-    top: top + '%',
-    left: left + '%',
     height: height + '%',
     width: width + '%',
   };
