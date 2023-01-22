@@ -2,7 +2,7 @@ import React from 'react';
 import { Draggable } from "react-beautiful-dnd";
 import EventHighlighter from './EventHighlighter';
 
-function CalendarEvent ({ id, index, event, onEventDelete, onEventUpdate, startDate }) {
+function CalendarEvent({ id, index, event, onEventDelete, onEventUpdate, startDate }) {
     return (
         <Draggable draggableId={id} index={index} >
             {(provided, snapshot) => {
@@ -15,8 +15,8 @@ function CalendarEvent ({ id, index, event, onEventDelete, onEventUpdate, startD
                         })
                     );
                 }
-                return(
-                    <div ref={provided.innerRef} snapshot={snapshot} { ...provided.draggableProps } { ...provided.dragHandleProps }>
+                return (
+                    <div ref={provided.innerRef} snapshot={snapshot} {...provided.draggableProps} {...provided.dragHandleProps}>
                         <EventHighlighter
                             isDragging={snapshot.isDragging}
                             calendarPosition={index}

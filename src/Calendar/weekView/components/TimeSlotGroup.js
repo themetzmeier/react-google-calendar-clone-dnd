@@ -34,7 +34,7 @@ function TimeSlotGroup ({ children, openAddEventModal, resources, time }) {
                     <div key={`${key}${time}n`} style={isTodaysDate(dateStamp) ? { ...lightHighlighter, "height": "100%" } : { "height": "100%" }}>
                         <button style={{ "width": "100%", "height": "100%", "background": "transparent", "border": "none", "cursor": "pointer", "outline": "none" }} onClick={() => openAddEventModal(key, time)} />
                     </div>
-                    {children}
+                    {children && children(resource.date)}
                     {provided.placeholder}
                   </div>
                 );

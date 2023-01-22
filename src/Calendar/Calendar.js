@@ -39,6 +39,8 @@ function Calendar() {
    * }
   */
   const updateEvent = (e) => {
+    // Probably have to update the [hour] mapping if an event is dragged vertically 
+    // I don't think that's happening right now so it only updates when moving horizontally on drag
     if(e.hasOwnProperty("destination") && e.destination) {
       let draggableId = e.draggableId;
       let updatedEvent = '';

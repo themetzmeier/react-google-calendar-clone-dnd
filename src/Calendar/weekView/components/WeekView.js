@@ -5,16 +5,17 @@ import WeekToolbar from './WeekToolbar';
 import WeekHeader from './WeekHeader';
 import TimeSlotGroup from './TimeSlotGroup';
 import CalendarEvent from './CalendarEvent';
-import {times, getAllDaysInTheWeek} from '../../utils';
-import { v4 as uuidv4 } from 'uuid';
+import { times, getAllDaysInTheWeek } from '../../utils';
 import { DragDropContext } from "react-beautiful-dnd";
 
 function WeekView({ date, events, onNewEvent, onEventUpdate, onEventDelete }) {
+
   const [weekViewState, setWeekViewState] = useState('');
+
 
   useEffect(() => {
     let startDate = moment();
-    if(date) {
+    if (date) {
       startDate = moment(date);
     }
     setWeekViewState({
@@ -38,7 +39,7 @@ function WeekView({ date, events, onNewEvent, onEventUpdate, onEventDelete }) {
    * Sets next week days in the state
   */
   const goToNextWeek = () => {
-    const dateAfter7Days = moment(weekViewState.startDate).add (7, 'days');
+    const dateAfter7Days = moment(weekViewState.startDate).add(7, 'days');
     setWeekViewState({
       startDate: +dateAfter7Days,
       weekDays: getAllDaysInTheWeek(dateAfter7Days),
@@ -49,7 +50,7 @@ function WeekView({ date, events, onNewEvent, onEventUpdate, onEventDelete }) {
    * Sets previous week days in the state
   */
   const goToPreviousWeek = () => {
-    const dateBefore7Days = moment(weekViewState.startDate).subtract (7, 'days');
+    const dateBefore7Days = moment(weekViewState.startDate).subtract(7, 'days');
     setWeekViewState({
       startDate: +dateBefore7Days,
       weekDays: getAllDaysInTheWeek(dateBefore7Days),
@@ -61,7 +62,7 @@ function WeekView({ date, events, onNewEvent, onEventUpdate, onEventDelete }) {
    */
   const goToToday = () => {
     setWeekViewState({
-      startDate: +moment (),
+      startDate: +moment(),
       weekDays: getAllDaysInTheWeek(),
     });
   };
@@ -117,7 +118,7 @@ function WeekView({ date, events, onNewEvent, onEventUpdate, onEventDelete }) {
     });
   };
 
-  if(weekViewState) {
+  if (weekViewState) {
     return (
       <div>
         <AddEventModal
@@ -138,32 +139,36 @@ function WeekView({ date, events, onNewEvent, onEventUpdate, onEventDelete }) {
         <WeekHeader headerArray={weekViewState.weekDays} />
         <DragDropContext onDragEnd={onEventUpdate}>
           {times.map((time) => {
-            return(
+            return (
               <TimeSlotGroup
                 key={time}
                 time={time}
                 resources={weekViewState.weekDays}
                 openAddEventModal={openAddEventModal}
               >
-                {events[time] && events[time].map((event, index) => {
-                  if(event.startWeek <= moment(weekViewState.startDate).week() && event.endWeek >= moment(weekViewState.startDate).week()) {
-                    let id = uuidv4();
-                    Object.assign(event, { id });
-                    return(
-                      <CalendarEvent 
-                        key={id}
-                        id={id}
-                        index={index}
-                        event={{ ...event }}
-                        onEventDelete={onEventDelete}
-                        onEventUpdate={onEventUpdate}
-                        startDate={weekViewState.startDate}
-                      />
-                    );
-                  } else {
-                    return null;
+                {
+                  (date) => {
+                    return (
+                      <React.Fragment>
+                        {events[time] && events[time].map((event, index) => {
+                          if (event.startWeek <= moment(weekViewState.startDate).week() && event.endWeek >= moment(weekViewState.startDate).week() && moment(event.start).date() === date) {
+                            return (
+                              <CalendarEvent
+                                key={event.id}
+                                id={event.id}
+                                index={index}
+                                event={{ ...event }}
+                                onEventDelete={onEventDelete}
+                                onEventUpdate={onEventUpdate}
+                                startDate={weekViewState.startDate}
+                              />
+                            );
+                          }
+                        })}
+                      </React.Fragment>
+                    )
                   }
-                })}
+                }
               </TimeSlotGroup>
             );
           })}
